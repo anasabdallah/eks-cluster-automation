@@ -19,7 +19,7 @@ data "aws_availability_zones" "available" {}
 
 locals {
   cluster_name = "${var.env}-${var.project}-eks-${random_string.suffix.result}"
-  vpc_name     = "${env}-${project}-vpc"
+  vpc_name     = "${var.env}-${var.project}-vpc"
 }
 
 resource "random_string" "suffix" {
