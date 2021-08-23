@@ -4,12 +4,10 @@ variable "region" {
 }
 
 variable "env" {
-  default     = "dev"
   description = "AWS env"
 }
 
 variable "project" {
-  default     = "test"
   description = "project name"
 }
 
@@ -20,7 +18,7 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  cluster_name = "${env}-${project}-eks-${random_string.suffix.result}"
+  cluster_name = "${var.env}-${var.project}-eks-${random_string.suffix.result}"
 }
 
 resource "random_string" "suffix" {

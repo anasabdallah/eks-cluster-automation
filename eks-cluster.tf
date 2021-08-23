@@ -5,8 +5,8 @@ module "eks" {
   subnets         = module.vpc.private_subnets
 
   tags = {
-    Environment = "dev"
-    Project     = "test"
+    Environment =  "${var.env}"
+    Project     =  "${var.project}"
   }
 
   vpc_id = module.vpc.vpc_id
@@ -17,18 +17,19 @@ module "eks" {
 
   worker_groups = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = "t3.small"
-      asg_desired_capacity          = 1
+      name                          = "${var.env}-${var.project}-worker-group"
+      instance_type                 = "${var.instance_type}"
+      asg_desired_capacity          = var.asg_desired_capacity
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
-    },
-    {
-      name                          = "worker-group-2"
-      instance_type                 = "t3.small"
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
-      asg_desired_capacity          = 1
-    },
+    }
   ]
+}
+
+variable "asg_desired_capacity" {
+  type = number
+}
+variable "instance_type" {
+  type = string
 }
 
 data "aws_eks_cluster" "cluster" {
